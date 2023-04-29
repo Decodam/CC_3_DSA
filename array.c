@@ -1,155 +1,148 @@
+/*
+C PROGRAM FOR IMPLIMENTING ARRAY DATA STRUCTURE. IT IS DESIGNED TO CONDUCT
+DATA STRUCTURE OPERATIONS ON AN ARRAY OF SIZE 5
+*/
+
 #include <stdio.h>
+#include <stdlib.h>
 
-int MAX;
+#define MAX 5
+int current_index = 0;
+int arr[MAX];
 
-//Trevarsal Method
-void travarsal(int arr[]){
+
+// TRAVERSE ALGORITHM
+void traverse(){
     int i;
 
-    for(i = 0; i < MAX; i++){
-        printf("Element %d = %d \n", i, arr[i]);
-    }
-}
-
-//Search Method
-void linear_search(int arr[], int querry){
-    int i;
-
-    for(i = 0; i < MAX; i++){
-        if(arr[i] == querry){
-            printf("The number %d can be found on the %d index with location %p", querry, i, &arr[i]);
-            break;
+    if(current_index == 0){
+        printf("Operation not possible, array is EMPTY!");
+    }else{
+        printf("The array elements are:    ");
+    
+        for (i = 0; i < current_index; i++){
+            printf("%d  ", arr[i]);
         }
-        if (arr[i] != querry && i == MAX - 1){
-            printf("The number %d is not found in the array", querry);
-        }
-        
-    }
-}
-
-//Update Method
-void update(int arr[], int index, int value){
-    if (index >= MAX || index < 0){
-        printf("Invalid input!!!");
-    } else {
-        arr[index] = value;
-        printf("The new array is: \n");
-        travarsal(arr);
-    }
-}
-
-//Delete Method
-void delete(int arr[], int index){
-    int i;
-    if (index >= MAX || index < 0){
-        printf("Invalid input!!!");
-    } else {
-        for (i = index; i < MAX; i++){
-            arr[i] = arr[i+1];
-        }
-        MAX = MAX-1;
-        printf("The new array is: \n");
-        travarsal(arr);
-    }
-}
-
-//Insert End Method
-void insertEnd(int arr[], int value){
-    arr[MAX] = value;
-    MAX = MAX + 1;
-    printf("The new array is: \n");
-    travarsal(arr);
-}
-
-//Insert Index Method
-void insertIndex(int arr[], int index, int value){
-    int i;
-
-    if (index >= MAX || index < 0){
-        printf("Invalid input!!!");
-    } else {
-        for (i = MAX; i > index; i--){
-            arr[i] = arr[i-1];
-        }
-        arr[index] = value;
-
-        MAX = MAX+1;
-        printf("The new array is: \n");
-        travarsal(arr);
-    }
-}
-
-
-int main(){
-    int arr[100];
-    int choice, input, input2, i;
-
-    printf("Enter the size of your array: "); scanf("%d", &MAX);
-    printf("Enter the elements of your array: \n");
-    for (i = 0; i < MAX; i++){
-        scanf("%d", &arr[i]);
     }
     
+}
 
-    while (1)
-    {
-        printf("Enter ctrl+c to exit \n");
-        printf("Enter 1 to traverse the array \n");
-        printf("Enter 2 to search an element in the array \n");
-        printf("Enter 3 to update an element in the array \n");
-        printf("Enter 4 to delete an element in the array \n");
-        printf("Enter 5 to insert an element in the array \n");
-        printf("Enter 6 to insert an element in the end of the array \n");
 
-        
+// INSERT ALGORITHM
+void insert(int pos, int value){
+    if (pos < 0 || pos > current_index) {
+        printf("Invalid position\n");
+        return;
+    }
+    for (int i = current_index-1; i >= pos; i--) {
+        arr[i+1] = arr[i];
+    }
+    arr[pos] = value;
+    current_index++;
+}
+
+
+// SEARCH ALGORITHM
+void search(int value){
+    int i, counter = 0;
+
+    for(i = 0; i < current_index; i++){
+        if(arr[i] == value){
+            printf("Element is found at position %d \n", i+1);;
+            counter++;
+        }
+    }
+
+    if (counter == 0){
+        printf("Element is found in the array!\n");
+    }
+    
+}
+
+
+// UPDATE ALGORITHM
+void update(int pos, int value){
+    if (pos < 0 || pos > current_index) {
+        printf("Invalid position\n");
+        return;
+    } else {
+        arr[pos-1] = value;
+    }
+}
+
+
+// DELETE ALGORITHM
+void delete(int pos) {
+    if (pos < 0 || pos >= current_index) {
+        printf("Invalid position\n");
+        return;
+    }
+    for (int i = pos; i < current_index-1; i++) {
+        arr[i] = arr[i+1];
+    }
+    current_index--;
+}
+
+
+// MAIN APP FUNCTION
+int main(){
+    int choice, input1, input2;
+
+    printf("New array of size 5 initialized... \n");
+
+    while (1){
+        printf("Enter 0 to EXIT  \n");
+        printf("Enter 1 to TRAVERSE  \n");
+        printf("Enter 2 to INSERT  \n");
+        printf("Enter 3 to SEARCH  \n");
+        printf("Enter 4 to UPDATE  \n");
+        printf("Enter 5 to DELETE  \n");
+
+        printf("\nEnter your choice:    "); scanf("%d", &choice);
         printf("\n");
-        printf("Your Choice:  "); scanf("%d", &choice);
-        printf("\n");
-
 
         switch (choice){
+            case 0:
+                printf("Thank You!");
+                exit(0);
+                break;
+
             case 1:
-                printf("All elements of the array are: \n");
-                travarsal(arr);
-                printf("\n \n");
+                traverse();
                 break;
+
             case 2:
-                printf("Enter the element you are searching for:  ");
-                scanf("%d", &input);
-                linear_search(arr, input);
-                printf("\n \n");
+                printf("Enter the POSITION to be inserted:  "); scanf("%d", &input1);
+                printf("Enter the VALUE to be inserted:  "); scanf("%d", &input2);
+                
+                insert(input1, input2);
                 break;
+
             case 3:
-                printf("Enter the index to be updated:  "); scanf("%d", &input);
-                printf("The new value of index %d is:  ", input); scanf("%d", &input2);
-                update(arr, input, input2);
-                printf("\n \n");
+                printf("Enter the VALUE to be searched:  "); scanf("%d", &input1);
+                search(input1);
                 break;
+
             case 4:
-                printf("Enter the index to be deleted:  "); scanf("%d", &input);
-                delete(arr, input);
-                printf("\n \n");
+                printf("Enter the POSITION to be updated:  "); scanf("%d", &input1);
+                printf("Enter the new VALUE:  "); scanf("%d", &input2);
+                
+                update(input1, input2);
                 break;
+
             case 5:
-                printf("Enter the index to be inserted at:  "); scanf("%d", &input);
-                printf("Enter the value to be inserted in the array:  "); scanf("%d", &input2);
-                insertIndex(arr, input, input2);
-                printf("\n \n");
+                printf("Enter the POSITION to be deleted:  "); scanf("%d", &input1);
+                delete(input1);
                 break;
-            case 6:
-                printf("Enter the value to be inserted at the end of the array:  "); scanf("%d", &input);
-                insertEnd(arr, input);
-                printf("\n \n");
-                break;
+            
             default:
-                printf("Wrong input try again");
-                printf("\n \n");
+                printf("Wrong choice! Try again...  \n");
                 break;
         }
-        
-        printf("==================================================================== \n \n");
 
+        printf("\n\n");
     }
+    
 
     return 0;
 }
